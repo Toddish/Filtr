@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Filtr.js Demos</title>
+	<style>
+		/* Some basic style resets to make the page look slightly nicer */
+		h1, h2 {
+			font-family: Arial, sans-serif;
+			margin: 10px 0;
+		}
+
+		p, a, li, label {
+			font-family: Verdana, sans-serif;
+			font-size: 13px;
+		}
+
+		ul {
+			clear: both;
+		}
+
+		label {
+			float: left;
+			margin-right: 10px;
+		}
+
+		label input {
+			margin-right: 10px;
+		}
+
+		form {
+			margin-bottom: 10px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Filtr.js Demos</h1>
+	<p>Items are filtered by 'fuzzy matching' the input. (Case insensitive.)</p>
+	<p>This means typing '<b>bi</b>' will match both '<b>Bi</b>son' and 'I<b>b</b>uk<b>i</b>', but not '<b>B</b>alrog'.</p>
+
+	<h2>Basic Usage</h2>
+	<p>Called with only the required parameters.</p>
+
+	<form>
+		<input name="filtr_1" placeholder="Type to filter list">
+	</form>
+
+	<ul id="list_1">
+		<li data-filtr="akuma">Akuma</li>
+		<li data-filtr="balrog">Balrog</li>
+		<li data-filtr="Chun Li">Chun Li</li>
+		<li data-filtr="Hugo">Hugo</li>
+		<li data-filtr="ibuki">Ibuki</li>
+		<li data-filtr="ken">Ken</li>
+		<li data-filtr="m.bison">M.Bison</li>
+		<li data-filtr="Rufus">Rufus</li>
+		<li data-filtr="ryu">Ryu</li>
+	</ul>
+
+	<h2>Adding show/hide animations</h2>
+	<p>You can change how the items are shown/hidden by using the <em>show</em>/<em>hide</em> callbacks.</p>
+
+	<form>
+		<input name="filtr_2" placeholder="Type to filter list">
+	</form>
+
+	<ul id="list_2">
+		<li data-filtr="akuma">Akuma</li>
+		<li data-filtr="balrog">Balrog</li>
+		<li data-filtr="Chun Li">Chun Li</li>
+		<li data-filtr="Hugo">Hugo</li>
+		<li data-filtr="ibuki">Ibuki</li>
+		<li data-filtr="ken">Ken</li>
+		<li data-filtr="m.bison">M.Bison</li>
+		<li data-filtr="Rufus">Rufus</li>
+		<li data-filtr="ryu">Ryu</li>
+	</ul>
+
+	<h2>Using a select box</h2>
+	<p>Setting the trigger to change means you can use a dropdown to filter!</p>
+	<p>The wait parameter has also been set to 0.</p>
+
+	<form>
+		<select name="filtr_3">
+			<option value="">All</option>
+			<option value="good">Good</option>
+			<option value="evil">Evil</option>
+		</select>
+	</form>
+
+	<ul id="list_3">
+		<li data-filtr="evil">Akuma</li>
+		<li data-filtr="evil">Balrog</li>
+		<li data-filtr="Chun Li">Chun Li</li>
+		<li data-filtr="evil">Hugo</li>
+		<li data-filtr="good">Ibuki</li>
+		<li data-filtr="good">Ken</li>
+		<li data-filtr="evil">M.Bison</li>
+		<li data-filtr="good">Rufus</li>
+		<li data-filtr="good">Ryu</li>
+	</ul>
+
+	<h2>Filtering on multiple inputs</h2>
+	<p>You can easily filter on more than one input by extending the <em>checkItem</em> callback.</p>
+
+	<form>
+			<label>
+				<input type="checkbox" value="sf2" class="filtr_4">Super Street Fighter II Turbo
+			</label>
+			<label>
+				<input type="checkbox"  value="sf3" class="filtr_4">Street Fighter III 3rd Strike</option>
+			</label>
+			<label>
+				<input type="checkbox"  value="sf4" class="filtr_4">Super Street Fighter 4</option>
+			</label>
+	</form>
+
+	<ul id="list_4">
+		<li data-filtr="sf2 sf3 sf4">Akuma</li>
+		<li data-filtr="sf2 sf4">Balrog</li>
+		<li data-filtr="sf2 sf3 sf4">Chun Li</li>
+		<li data-filtr="sf3">Hugo</li>
+		<li data-filtr="sf3 sf4">Ibuki</li>
+		<li data-filtr="sf2 sf3 sf4">Ken</li>
+		<li data-filtr="sf2 sf4">M.Bison</li>
+		<li data-filtr="sf4">Rufus</li>
+		<li data-filtr="sf2 sf3 sf4">Ryu</li>
+	</ul>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+	<script src="../assets/js/filtr.min.js"></script>
+	<script>
+
+		$(function(){
+
+			$('input[name="filtr_1"]').filtr($('#list_1 li'));
+
+			$('input[name="filtr_2"]').filtr($('#list_2 li'), {
+				show				: function($item){
+					$item.slideDown('fast');
+				},
+				hide				: function($item){
+					$item.slideUp('fast');
+				}
+			});
+
+			$('select[name="filtr_3"]').filtr($('#list_3 li'), {
+				trigger				: 'change',
+				wait				: 0
+			});
+
+			// Get the filters
+			// as we use them in the callback
+			var $filters = $('.filtr_4');
+
+			$filters.filtr($('#list_4 li'), {
+				trigger				: 'change',
+				wait				: 0,
+				checkItem			: function(value, item){
+
+					// Because we filter from multiple inputs
+					// we don't just compare the value passed in.
+					// Essentially, it gets ignored.
+
+					var valid = true;
+
+					// Loop through the available filters to get
+					$filters.each(function(){
+
+						var $this = $(this);
+
+						if( $this.is(':checked') ){
+
+							// If the checkbox is checked
+							// and the value isn't present in the data attr
+							if( item.data.indexOf($this.val()) === -1 ){
+
+								valid = false;
+
+							}
+
+						}
+
+					});
+
+					return valid;
+				}
+			});
+
+		});
+
+	</script>
+</body>
+</html>
