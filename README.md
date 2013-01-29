@@ -47,7 +47,7 @@ Call the plugin:
 
 ```javascript
 var options = {};
-$('input[name="filter"]').filter($('.filter_items li'), options);
+$('input[name="filter"]').filtr($('.filter_items li'), options);
 ```
 
 ---
