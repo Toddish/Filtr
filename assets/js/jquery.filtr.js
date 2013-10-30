@@ -94,7 +94,9 @@
 				};
 
 				// Bind the event
-				$input.on(bind);
+				$input
+					.on(bind)
+					.trigger(o.trigger);
 
 			});
 
