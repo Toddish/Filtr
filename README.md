@@ -17,7 +17,7 @@ A small jQuery plugin that helps filter a selection of items.
 
 ## Installation
 
-Place `/assets/js/filtr.min.js` in `/your/js/folder/`.
+Place `/assets/js/jquery.filtr.min.js` in `/your/js/folder/`.
 
 Add this just before your closing `body` tag, after you've included jQuery:
 
